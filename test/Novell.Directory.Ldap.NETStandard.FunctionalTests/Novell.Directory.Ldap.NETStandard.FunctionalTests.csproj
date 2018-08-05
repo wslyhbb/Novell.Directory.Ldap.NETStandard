@@ -1,13 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFrameworks>netcoreapp1.1;netcoreapp2.1</TargetFrameworks>
     <DebugType>portable</DebugType>
     <AssemblyName>Novell.Directory.Ldap.NETStandard.FunctionalTests</AssemblyName>
-    <PackageId>Novell.Directory.Ldap.NETStandard.FunctionalTests</PackageId>
-    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.4;portable-net451+win8</PackageTargetFallback>
-    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>

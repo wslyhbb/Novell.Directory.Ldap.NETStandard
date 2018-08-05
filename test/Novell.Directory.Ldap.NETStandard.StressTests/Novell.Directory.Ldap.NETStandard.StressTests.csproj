@@ -1,13 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFrameworks>netcoreapp1.1;netcoreapp2.1</TargetFrameworks>
     <DebugType>portable</DebugType>
     <AssemblyName>Novell.Directory.Ldap.NETStandard.StressTests</AssemblyName>
     <OutputType>Exe</OutputType>
-    <PackageId>Novell.Directory.Ldap.NETStandard.StressTests</PackageId>
-    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50;portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
 
   <ItemGroup>

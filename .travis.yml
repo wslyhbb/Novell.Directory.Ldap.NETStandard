@@ -58,7 +58,8 @@ before_script:
 jobs:
   include:
     - stage: compile & unit test
-      dotnet: 1.1.5
+      dotnet: 
+      - 1.1.5
       env:
       - CONFIGURATION=Release
       script:
@@ -68,7 +69,8 @@ jobs:
       - export TRANSPORT_SECURITY=SSL; dotnet test --configuration $CONFIGURATION test/Novell.Directory.Ldap.NETStandard.FunctionalTests/Novell.Directory.Ldap.NETStandard.FunctionalTests.csproj
       - export TRANSPORT_SECURITY=TLS; dotnet test --configuration $CONFIGURATION test/Novell.Directory.Ldap.NETStandard.FunctionalTests/Novell.Directory.Ldap.NETStandard.FunctionalTests.csproj
     - stage: compile & unit test
-      dotnet: 2.1.302
+      dotnet:
+      - 2.1.302
       env:
       - CONFIGURATION=Release      
       script:
