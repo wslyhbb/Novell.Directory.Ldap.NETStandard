@@ -1,20 +1,12 @@
+sudo: required
+dist: trusty
 language: csharp
+dotnet: 1.1.5
 mono: none
 
 stages:
   - compile & unit test
   - test
-
-matrix:
-  include:
-    - os: linux
-      dist: trusty
-      sudo: required
-      dotnet: 1.1.5
-    - os: linux
-      dist: trusty
-      sudo: required
-      dotnet: 2.1.302
 
 env:
   - CONFIGURATION=Release NOTHREADS=10 SECURITY=OFF
@@ -66,8 +58,19 @@ before_script:
 jobs:
   include:
     - stage: compile & unit test
+      dotnet: 1.1.5
       env:
       - CONFIGURATION=Release
+      script:
+      - dotnet restore
+      - dotnet build --configuration $CONFIGURATION
+      - export TRANSPORT_SECURITY=OFF; dotnet test --configuration $CONFIGURATION test/Novell.Directory.Ldap.NETStandard.FunctionalTests/Novell.Directory.Ldap.NETStandard.FunctionalTests.csproj
+      - export TRANSPORT_SECURITY=SSL; dotnet test --configuration $CONFIGURATION test/Novell.Directory.Ldap.NETStandard.FunctionalTests/Novell.Directory.Ldap.NETStandard.FunctionalTests.csproj
+      - export TRANSPORT_SECURITY=TLS; dotnet test --configuration $CONFIGURATION test/Novell.Directory.Ldap.NETStandard.FunctionalTests/Novell.Directory.Ldap.NETStandard.FunctionalTests.csproj
+    - stage: compile & unit test
+      dotnet: 2.1.302
+      env:
+      - CONFIGURATION=Release      
       script:
       - dotnet restore
       - dotnet build --configuration $CONFIGURATION
