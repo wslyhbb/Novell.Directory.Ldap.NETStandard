@@ -455,7 +455,7 @@ namespace Novell.Directory.Ldap
         /// <returns>
         ///     the Connection object.
         /// </returns>
-        internal Connection Connection { get; private set; }
+        private Connection Connection { get; set; }
 
         public void Dispose()
         {
