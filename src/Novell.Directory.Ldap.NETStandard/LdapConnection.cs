@@ -1601,8 +1601,13 @@ namespace Novell.Directory.Ldap
         /// </param>
         private void DisconnectImpl()
         {
+            if (Connection.Tls)
+            {
+                StopTls();
+            }
+
             // disconnect doesn't affect other clones
-            // If not a clone, distroys connection
+            // If not a clone, destroys connection
             Connection = Connection.DestroyClone();
         }
 

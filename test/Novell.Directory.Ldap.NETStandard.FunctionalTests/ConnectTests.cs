@@ -1,4 +1,5 @@
-﻿using Novell.Directory.Ldap.NETStandard.FunctionalTests.Helpers;
+﻿using System;
+using Novell.Directory.Ldap.NETStandard.FunctionalTests.Helpers;
 using Xunit;
 
 namespace Novell.Directory.Ldap.NETStandard.FunctionalTests
@@ -31,9 +32,15 @@ namespace Novell.Directory.Ldap.NETStandard.FunctionalTests
             TestHelper.WithLdapConnection(
                 ldapConnection =>
                 {
-                    ldapConnection.StartTls();
-                    ldapConnection.Bind(TestsConfig.LdapServer.RootUserDn, TestsConfig.LdapServer.RootUserPassword);
-                    ldapConnection.StopTls();
+                    try
+                    {
+                        ldapConnection.StartTls();
+                        ldapConnection.Bind(TestsConfig.LdapServer.RootUserDn, TestsConfig.LdapServer.RootUserPassword);
+                    }
+                    finally
+                    {
+                        //ldapConnection.StopTls();
+                    }
                 }, false, true);
         }
 
