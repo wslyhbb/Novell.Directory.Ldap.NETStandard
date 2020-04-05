@@ -35,6 +35,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using Novell.Directory.Ldap.Utilclass;
 
 namespace Novell.Directory.Ldap
@@ -562,14 +563,14 @@ namespace Novell.Directory.Ldap
         ///     the value of the attribute.
         ///     @throws IllegalArgumentException if url is null.
         /// </param>
-        public void AddUrlValue(string url)
+        public async Task AddUrlValueAsync(string url)
         {
             if (url == null)
             {
                 throw new ArgumentException("Attribute URL cannot be null");
             }
 
-            AddUrlValue(new Uri(url));
+            await AddUrlValueAsync(new Uri(url));
         }
 
         /// <summary>
@@ -581,7 +582,7 @@ namespace Novell.Directory.Ldap
         ///     of the attribute.
         ///     @throws IllegalArgumentException if url is null.
         /// </param>
-        public void AddUrlValue(Uri url)
+        public async Task AddUrlValueAsync(Uri url)
         {
             // Class to encapsulate the data bytes and the length
             if (url == null)
@@ -593,9 +594,9 @@ namespace Novell.Directory.Ldap
             {
                 // Get InputStream from the URL
                 var webRequest = WebRequest.Create(url);
-                var inRenamed = webRequest.GetResponseAsync().ResultAndUnwrap().GetResponseStream();
+                var inRenamed = (await webRequest.GetResponseAsync()).GetResponseStream();
 
-                // Read the bytes into buffers and store the them in an arraylist
+                // Read the bytes into buffers and store them in a list
                 var bufs = new List<UrlData>();
                 var buf = new byte[4096];
                 int len, totalLength = 0;
@@ -875,7 +876,6 @@ namespace Novell.Directory.Ldap
                         }
 
                         _values = tmp;
-                        tmp = null;
                     }
 
                     break;
@@ -924,7 +924,6 @@ namespace Novell.Directory.Ldap
                 Array.Copy(_values, 0, tmp, 0, _values.Length);
                 tmp[_values.Length] = bytes;
                 _values = tmp;
-                tmp = null;
             }
         }
 

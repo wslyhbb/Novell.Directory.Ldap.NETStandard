@@ -32,7 +32,7 @@ namespace Novell.Directory.Ldap.NETStandard.FunctionalTests.Helpers
 
         private static T WithLdapConnection<T>(Func<ILdapConnection, T> funcOnConnectedLdapConnection, bool useSsl = false)
         {
-            return WithLdapConnectionImpl(funcOnConnectedLdapConnection);
+            return WithLdapConnectionImpl(funcOnConnectedLdapConnection, useSsl);
         }
 
         public static T WithAuthenticatedLdapConnection<T>(Func<ILdapConnection, T> funcOnAuthenticatedLdapConnection)
@@ -92,8 +92,7 @@ namespace Novell.Directory.Ldap.NETStandard.FunctionalTests.Helpers
             var envValue = Environment.GetEnvironmentVariable("TRANSPORT_SECURITY");
             if (!string.IsNullOrWhiteSpace(envValue))
             {
-                TransportSecurity parsedValue;
-                if (Enum.TryParse(envValue, true, out parsedValue))
+                if (Enum.TryParse(envValue, true, out TransportSecurity parsedValue))
                 {
                     transportSecurity = parsedValue;
                 }
