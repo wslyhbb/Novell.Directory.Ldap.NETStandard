@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
 * The MIT License
 * Copyright (c) 2003 Novell Inc.  www.novell.com
 *
@@ -20,15 +20,6 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 *******************************************************************************/
-
-//
-// Novell.Directory.Ldap.Utilclass.ResourcesHandler.cs
-//
-// Author:
-//   Sunil Kumar (Sunilk@novell.com)
-//
-// (C) 2003 Novell, Inc (http://www.novell.com)
-//
 
 using System;
 using System.Globalization;
@@ -64,7 +55,7 @@ namespace Novell.Directory.Ldap.Utilclass
         /// <param name="messageOrKey">
         ///     Key string for the resource.
         /// </param>
-        /// <param name="">
+        /// <param name="arguments">
         ///     arguments.
         /// </param>
         /// <returns>
@@ -78,7 +69,7 @@ namespace Novell.Directory.Ldap.Utilclass
 
         /// <summary>
         ///     Returns the message stored in the ExceptionMessages resource for the
-        ///     specified locale using messageOrKey and argments passed into the
+        ///     specified locale using messageOrKey and arguments passed into the
         ///     constructor.  If no string exists in the resource then this returns
         ///     the string stored in message.  (This method is identical to
         ///     getLdapErrorMessage(Locale locale).).
@@ -86,7 +77,7 @@ namespace Novell.Directory.Ldap.Utilclass
         /// <param name="messageOrKey">
         ///     Key string for the resource.
         /// </param>
-        /// <param name="">
+        /// <param name="arguments">
         ///     arguments.
         /// </param>
         /// <param name="locale">
@@ -165,17 +156,10 @@ namespace Novell.Directory.Ldap.Utilclass
         /// </returns>
         public static string GetResultString(int code, CultureInfo locale)
         {
-            string result;
-            try
-            {
-                result = ResultCodeMessages.GetResultCode(Convert.ToString(code));
-            }
-            catch (ArgumentNullException)
-            {
-                result = GetMessage(ExceptionMessages.UnknownResult, new object[] {code }, locale);
-            }
-
-            return result;
+            var codeAsString = Convert.ToString(code);
+            return ResultCodeMessages.HasResultCode(codeAsString)
+                ? ResultCodeMessages.GetResultCode(codeAsString)
+                : GetMessage(ExceptionMessages.UnknownResult, new object[] { code }, locale);
         }
     } // end class ResourcesHandler
 }

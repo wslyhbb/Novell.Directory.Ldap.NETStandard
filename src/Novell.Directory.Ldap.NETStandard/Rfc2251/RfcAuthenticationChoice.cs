@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
 * The MIT License
 * Copyright (c) 2003 Novell Inc.  www.novell.com
 *
@@ -21,16 +21,6 @@
 * SOFTWARE.
 *******************************************************************************/
 
-//
-// Novell.Directory.Ldap.Rfc2251.RfcAuthenticationChoice.cs
-//
-// Author:
-//   Sunil Kumar (Sunilk@novell.com)
-//
-// (C) 2003 Novell, Inc (http://www.novell.com)
-//
-
-using System;
 using Novell.Directory.Ldap.Asn1;
 
 namespace Novell.Directory.Ldap.Rfc2251
@@ -62,7 +52,7 @@ namespace Novell.Directory.Ldap.Rfc2251
                     new Asn1Identifier(Asn1Identifier.Context, true, 3),
                     new RfcSaslCredentials(
                         new RfcLdapString(mechanism),
-                        credentials != null ? new Asn1OctetString(credentials) : null), false))
+                        credentials != null ? new Asn1OctetString(credentials) : new Asn1OctetString(new byte[0])), false))
         {
             // implicit tagging
         }

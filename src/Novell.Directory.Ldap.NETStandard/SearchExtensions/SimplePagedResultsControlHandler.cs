@@ -1,8 +1,8 @@
+﻿using JetBrains.Annotations;
+using Novell.Directory.Ldap.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
-using Novell.Directory.Ldap.Controls;
 
 namespace Novell.Directory.Ldap
 {
@@ -12,7 +12,8 @@ namespace Novell.Directory.Ldap
     /// </summary>
     public class SimplePagedResultsControlHandler
     {
-        [NotNull] private readonly ILdapConnection _ldapConnection;
+        [NotNull]
+        private readonly ILdapConnection _ldapConnection;
 
         public SimplePagedResultsControlHandler([NotNull] ILdapConnection ldapConnection)
         {
@@ -21,16 +22,30 @@ namespace Novell.Directory.Ldap
 
         public List<LdapEntry> SearchWithSimplePaging([NotNull] SearchOptions options, int pageSize)
         {
-            if (options == null) throw new ArgumentNullException(nameof(options));
-            if (pageSize <= 0) throw new ArgumentOutOfRangeException(nameof(pageSize));
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            if (pageSize <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageSize));
+            }
 
             return SearchWithSimplePaging(entry => entry, options, pageSize);
         }
 
         public List<T> SearchWithSimplePaging<T>([NotNull] Func<LdapEntry, T> converter, [NotNull] SearchOptions options, int pageSize)
         {
-            if (converter == null) throw new ArgumentNullException(nameof(converter));
-            if (options == null) throw new ArgumentNullException(nameof(options));
+            if (converter == null)
+            {
+                throw new ArgumentNullException(nameof(converter));
+            }
+
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
 
             var searchResult = new List<T>();
             var searchConstraints = options.SearchConstraints ?? _ldapConnection.SearchConstraints;
@@ -45,7 +60,7 @@ namespace Novell.Directory.Ldap
         }
 
         private static bool PrepareForNextPage(
-            [CanBeNull] LdapControl[] pageResponseControls, 
+            [CanBeNull] LdapControl[] pageResponseControls,
             int pageSize,
             bool isInitialCall,
             ref LdapSearchConstraints searchConstraints)
@@ -53,7 +68,7 @@ namespace Novell.Directory.Ldap
             var cookie = SimplePagedResultsControl.GetEmptyCookie;
             if (!isInitialCall)
             {
-                var pagedResultsControl = (SimplePagedResultsControl) pageResponseControls?.SingleOrDefault(x => x is SimplePagedResultsControl);
+                var pagedResultsControl = (SimplePagedResultsControl)pageResponseControls?.SingleOrDefault(x => x is SimplePagedResultsControl);
                 if (pagedResultsControl == null)
                 {
                     throw new LdapException($"Failed to find <{nameof(SimplePagedResultsControl)}>. Searching is abruptly stopped");
@@ -64,6 +79,7 @@ namespace Novell.Directory.Ldap
                 {
                     return false;
                 }
+
                 cookie = pagedResultsControl.Cookie;
             }
 
@@ -85,8 +101,15 @@ namespace Novell.Directory.Ldap
             [NotNull] List<T> mappedResultsAccumulator,
             [NotNull] Func<LdapEntry, T> converter)
         {
-            if (searchConstraints == null) throw new ArgumentNullException(nameof(searchConstraints));
-            if (mappedResultsAccumulator == null) throw new ArgumentNullException(nameof(mappedResultsAccumulator));
+            if (searchConstraints == null)
+            {
+                throw new ArgumentNullException(nameof(searchConstraints));
+            }
+
+            if (mappedResultsAccumulator == null)
+            {
+                throw new ArgumentNullException(nameof(mappedResultsAccumulator));
+            }
 
             var searchResults = _ldapConnection.Search(
                     options.SearchBase,

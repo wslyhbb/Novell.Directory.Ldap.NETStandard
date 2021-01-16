@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
 * The MIT License
 * Copyright (c) 2003 Novell Inc.  www.novell.com
 *
@@ -21,19 +21,10 @@
 * SOFTWARE.
 *******************************************************************************/
 
-//
-// Novell.Directory.Ldap.LdapSearchResults.cs
-//
-// Author:
-//   Sunil Kumar (Sunilk@novell.com)
-//
-// (C) 2003 Novell, Inc (http://www.novell.com)
-//
-
+using Novell.Directory.Ldap.Utilclass;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Novell.Directory.Ldap.Utilclass;
 
 namespace Novell.Directory.Ldap
 {
@@ -279,7 +270,6 @@ namespace Novell.Directory.Ldap
             // Check if the enumeration is empty and must be reloaded
             ResetVectors();
 
-
             // Check for Search References & deliver to app as they come in
             // We only get here if not following referrals/references
             if (_referenceIndex < _referenceCount)
@@ -391,9 +381,9 @@ namespace Novell.Directory.Ldap
             ResetVectors();
             _completed = true;
         }
-        
+
         /// <summary>
-        /// Get referral connections
+        /// Get referral connections.
         /// </summary>
         /// <returns></returns>
         public List<object> GetReferralConnections()

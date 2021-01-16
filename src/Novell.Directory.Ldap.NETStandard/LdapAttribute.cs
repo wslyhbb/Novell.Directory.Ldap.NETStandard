@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
 * The MIT License
 * Copyright (c) 2003 Novell Inc.  www.novell.com
 *
@@ -21,22 +21,11 @@
 * SOFTWARE.
 *******************************************************************************/
 
-//
-// Novell.Directory.Ldap.LdapAttribute.cs
-//
-// Author:
-//   Sunil Kumar (Sunilk@novell.com)
-//
-// (C) 2003 Novell, Inc (http://www.novell.com)
-//
-
+using Novell.Directory.Ldap.Utilclass;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using Novell.Directory.Ldap.Utilclass;
 
 namespace Novell.Directory.Ldap
 {
@@ -102,12 +91,7 @@ namespace Novell.Directory.Ldap
         /// </param>
         public LdapAttribute(string attrName)
         {
-            if (attrName == null)
-            {
-                throw new ArgumentException("Attribute name cannot be null");
-            }
-
-            Name = attrName;
+            Name = attrName ?? throw new ArgumentException("Attribute name cannot be null");
             _baseName = GetBaseName(attrName);
             _subTypes = GetSubtypes(attrName);
         }
@@ -305,6 +289,7 @@ namespace Novell.Directory.Ldap
                     var valueBytes = (byte[])_values[0];
                     rval = valueBytes.ToUtf8String();
                 }
+
                 return rval;
             }
         }
@@ -531,7 +516,6 @@ namespace Novell.Directory.Ldap
             Add(Base64.Decode(attrChars));
         }
 
-
         /// <summary>
         ///     Returns the base name of the attribute.
         ///     For example, if the attribute name is cn;lang-ja;phonetic,
@@ -697,7 +681,7 @@ namespace Novell.Directory.Ldap
                 }
 
                 return false;
-                gotSubType: ;
+            gotSubType:;
             }
 
             return true;
@@ -809,7 +793,7 @@ namespace Novell.Directory.Ldap
         {
             if (_values == null)
             {
-                _values = new object[] {bytes };
+                _values = new object[] { bytes };
             }
             else
             {
