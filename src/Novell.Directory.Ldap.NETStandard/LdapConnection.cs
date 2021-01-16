@@ -470,6 +470,7 @@ namespace Novell.Directory.Ldap
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <inheritdoc />
@@ -2416,10 +2417,10 @@ namespace Novell.Directory.Ldap
                         };
                         var url = new LdapUrl(referrals[i]);
                         rconn.Connect(url.Host, url.Port);
-                        if (rh is ILdapAuthHandler)
+                        if (rh is ILdapAuthHandler handler)
                         {
                             // Get application supplied dn and pw
-                            var ap = ((ILdapAuthHandler)rh).GetAuthProvider(url.Host, url.Port);
+                            var ap = handler.GetAuthProvider(url.Host, url.Port);
                             dn = ap.Dn;
                             pw = ap.Password;
                         }
@@ -2499,14 +2500,14 @@ namespace Novell.Directory.Ldap
             {
                 // Could not connect to any server, throw an exception
                 LdapException ldapex;
-                if (ex is LdapReferralException)
+                if (ex is LdapReferralException exception)
                 {
-                    throw (LdapReferralException)ex;
+                    throw exception;
                 }
 
-                if (ex is LdapException)
+                if (ex is LdapException exception1)
                 {
-                    ldapex = (LdapException)ex;
+                    ldapex = exception1;
                 }
                 else
                 {
@@ -2709,9 +2710,9 @@ namespace Novell.Directory.Ldap
             }
             catch (Exception ex)
             {
-                if (ex is LdapReferralException)
+                if (ex is LdapReferralException exception)
                 {
-                    throw (LdapReferralException)ex;
+                    throw exception;
                 }
 
                 // Set referral list and failed referral

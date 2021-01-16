@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Novell.Directory.Ldap
 {
@@ -14,7 +14,7 @@ namespace Novell.Directory.Ldap
         private string _delimiters = " \t\n\r";
 
         // Element list identified
-        private ArrayList _elements;
+        private List<object> _elements;
 
         // Source string to use
         private string _source;
@@ -25,7 +25,7 @@ namespace Novell.Directory.Ldap
         /// <param name="source">String to tokenize.</param>
         public Tokenizer(string source)
         {
-            _elements = new ArrayList();
+            _elements = new List<object>();
             _elements.AddRange(source.Split(_delimiters.ToCharArray()));
             RemoveEmptyStrings();
             _source = source;
@@ -39,7 +39,7 @@ namespace Novell.Directory.Ldap
         /// <param name="delimiters">String containing the delimiters.</param>
         public Tokenizer(string source, string delimiters)
         {
-            _elements = new ArrayList();
+            _elements = new List<object>();
             _delimiters = delimiters;
             _elements.AddRange(source.Split(_delimiters.ToCharArray()));
             RemoveEmptyStrings();
@@ -48,7 +48,7 @@ namespace Novell.Directory.Ldap
 
         public Tokenizer(string source, string delimiters, bool retDel)
         {
-            _elements = new ArrayList();
+            _elements = new List<object>();
             _delimiters = delimiters;
             _source = source;
             _returnDelims = retDel;
@@ -148,7 +148,7 @@ namespace Novell.Directory.Ldap
                 return result;
             }
 
-            _elements = new ArrayList();
+            _elements = new List<object>();
             _elements.AddRange(_source.Split(_delimiters.ToCharArray()));
             RemoveEmptyStrings();
             result = (string)_elements[0];

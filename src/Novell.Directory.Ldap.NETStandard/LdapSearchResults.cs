@@ -118,18 +118,18 @@ namespace Novell.Directory.Ldap
                                 ResponseControls = ctls;
                             }
 
-                            if (msg is LdapSearchResult)
+                            if (msg is LdapSearchResult result)
                             {
                                 // Search Entry
-                                object entry = ((LdapSearchResult)msg).Entry;
+                                object entry = result.Entry;
                                 _entries.Add(entry);
                                 i++;
                                 _entryCount++;
                             }
-                            else if (msg is LdapSearchResultReference)
+                            else if (msg is LdapSearchResultReference reference)
                             {
                                 // Search Ref
-                                var refs = ((LdapSearchResultReference)msg).Referrals;
+                                var refs = reference.Referrals;
 
                                 if (_cons.ReferralFollowing)
                                 {
@@ -285,12 +285,12 @@ namespace Novell.Directory.Ldap
             {
                 // Check for Search Entries and the Search Result
                 element = _entries[_entryIndex++];
-                if (element is LdapResponse)
+                if (element is LdapResponse response)
                 {
                     // Search done w/bad status
-                    if (((LdapResponse)element).HasException())
+                    if (response.HasException())
                     {
-                        var lr = (LdapResponse)element;
+                        var lr = response;
                         var ri = lr.ActiveReferral;
 
                         if (ri != null)
@@ -304,11 +304,11 @@ namespace Novell.Directory.Ldap
                     }
 
                     // Throw an exception if not success
-                    ((LdapResponse)element).ChkResultCode();
+                    response.ChkResultCode();
                 }
-                else if (element is LdapException)
+                else if (element is LdapException exception)
                 {
-                    throw (LdapException)element;
+                    throw exception;
                 }
             }
             else

@@ -176,7 +176,7 @@ namespace Novell.Directory.Ldap.Asn1
                 throw new EndOfStreamException("LBER: BOOLEAN: decode error: EOF");
             }
 
-            return lber[0] == 0x00 ? false : true;
+            return lber[0] != 0x00;
         }
 
         /// <summary>
