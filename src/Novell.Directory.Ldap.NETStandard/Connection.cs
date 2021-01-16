@@ -89,6 +89,8 @@ namespace Novell.Directory.Ldap
 
         internal static string Security = "simple";
 
+        private readonly object _lock = new object();
+
         // When set to true the client connection is up and running
         private bool _clientActive = true;
 
@@ -423,9 +425,9 @@ namespace Novell.Directory.Ldap
                         readerException);
                 }
 
-                lock (this)
+                lock (_lock)
                 {
-                    Monitor.Wait(this, TimeSpan.FromMilliseconds(5));
+                    Monitor.Wait(_lock, TimeSpan.FromMilliseconds(5));
                 }
 
                 rInst = _reader;
@@ -531,7 +533,7 @@ namespace Novell.Directory.Ldap
 
                         if (!IPAddress.TryParse(host, out IPAddress ipAddress))
                         {
-                            var ipAddresses = Dns.GetHostAddressesAsync(host).Result;
+                            var ipAddresses = Dns.GetHostAddressesAsync(host).ResultAndUnwrap();
                             ipAddress = ipAddresses.First(ip =>
                                 ip.AddressFamily == AddressFamily.InterNetwork ||
                                 ip.AddressFamily == AddressFamily.InterNetworkV6);
@@ -541,7 +543,8 @@ namespace Novell.Directory.Ldap
                         {
                             _sock = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.IP);
                             var ipEndPoint = new IPEndPoint(ipAddress, port);
-                            _sock.ConnectAsync(ipEndPoint).WaitAndUnwrap(ConnectionTimeout);
+
+                            _sock.Connect(ipEndPoint, ConnectionTimeout);
 
                             var sslstream = new SslStream(
                                 new NetworkStream(_sock, true),
@@ -600,7 +603,7 @@ namespace Novell.Directory.Ldap
         /// <summary>  Increments the count of cloned connections.</summary>
         internal void IncrCloneCount()
         {
-            lock (this)
+            lock (_lock)
             {
                 _cloneCount++;
             }
@@ -634,7 +637,7 @@ namespace Novell.Directory.Ldap
         /// </returns>
         internal Connection DestroyClone()
         {
-            lock (this)
+            lock (_lock)
             {
                 var conn = this;
 
