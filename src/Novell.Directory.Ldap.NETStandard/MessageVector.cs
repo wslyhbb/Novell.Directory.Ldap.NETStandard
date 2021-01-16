@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Novell.Directory.Ldap
@@ -35,11 +36,11 @@ namespace Novell.Directory.Ldap
 #pragma warning disable CA2002 // Do not lock on objects with weak identity
     internal class MessageVector
     {
-        private readonly ArrayList _arrayList;
+        private readonly List<object> _list;
 
         internal MessageVector(int cap)
         {
-            _arrayList = new ArrayList(cap);
+            _list = new List<object>(cap);
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace Novell.Directory.Ldap
             lock (this)
             {
                 var results = ToArray();
-                _arrayList.Clear();
+                _list.Clear();
                 return results;
             }
         }
@@ -76,7 +77,7 @@ namespace Novell.Directory.Ldap
         {
             lock (this)
             {
-                var message = _arrayList.OfType<Message>().SingleOrDefault(m => m.MessageId == msgId);
+                var message = _list.OfType<Message>().SingleOrDefault(m => m.MessageId == msgId);
                 if (message == null)
                 {
                     throw new FieldAccessException();
@@ -89,14 +90,11 @@ namespace Novell.Directory.Ldap
         /// <summary>
         ///     Adds an object to the end of the Vector.
         /// </summary>
-        /// <returns>
-        ///     The  index at which the message has been added.
-        /// </returns>
-        public int Add(object message)
+        public void Add(object message)
         {
             lock (this)
             {
-                return _arrayList.Add(message);
+                _list.Add(message);
             }
         }
 
@@ -107,7 +105,7 @@ namespace Novell.Directory.Ldap
         {
             lock (this)
             {
-                _arrayList.Remove(message);
+                _list.Remove(message);
             }
         }
 
@@ -120,7 +118,7 @@ namespace Novell.Directory.Ldap
             {
                 lock (this)
                 {
-                    return _arrayList.Count;
+                    return _list.Count;
                 }
             }
         }
@@ -134,7 +132,7 @@ namespace Novell.Directory.Ldap
             {
                 lock (this)
                 {
-                    return _arrayList[index];
+                    return _list[index];
                 }
             }
         }
@@ -146,7 +144,7 @@ namespace Novell.Directory.Ldap
         {
             lock (this)
             {
-                _arrayList.RemoveAt(index);
+                _list.RemoveAt(index);
             }
         }
 
@@ -157,7 +155,7 @@ namespace Novell.Directory.Ldap
         {
             lock (this)
             {
-                return _arrayList.ToArray();
+                return _list.ToArray();
             }
         }
 
@@ -168,7 +166,7 @@ namespace Novell.Directory.Ldap
         {
             lock (this)
             {
-                _arrayList.Clear();
+                _list.Clear();
             }
         }
     }
